@@ -5788,11 +5788,19 @@ button:active:not(:focus-visible),
 
 @media (max-width: 640px) {
   .nav-brand {
-    display: none;
+    display: flex;
   }
 
   .site-header {
-    justify-content: flex-end;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 10px 14px;
+  }
+
+  .header-actions {
+    justify-content: center;
+    width: 100%;
   }
 
   .hero h1,
