@@ -140,68 +140,65 @@ function LiveVisual({ visual }: { visual: StoryVisual }) {
           </div>
           <footer>
             <span className="story-wave">||||||||||||</span>
-            Granola is listening
+            Notes are open
           </footer>
         </div>
       );
-    case "live-transcript":
+    case "meeting-notes":
       return (
         <div className="story-ui story-transcript-ui" aria-hidden>
           <header className="story-ui-bar">
-            <strong>Live transcript</strong>
+            <strong>Meeting notes</strong>
             <span>{visual.timestamp}</span>
           </header>
           <blockquote>
             <strong>{visual.speaker}</strong>
-            “{visual.quote}”
+            {visual.note}
           </blockquote>
           <footer>
-            {visual.signals.map((signal) => (
-              <span key={signal}>{signal}</span>
+            {visual.tags.map((tag) => (
+              <span key={tag}>{tag}</span>
             ))}
           </footer>
         </div>
       );
-    case "deck-update":
+    case "plan-draft":
       return (
         <div className="story-ui story-deck-ui" aria-hidden>
           <header className="story-ui-bar">
-            <strong>Open deck</strong>
-            <span>Editing now</span>
+            <strong>Open plan</strong>
+            <span>Writing now</span>
           </header>
           <div className="story-mini-slide">
             <small>{visual.eyebrow}</small>
             <strong>{visual.headline}</strong>
-            <span>{visual.product}</span>
+            <span>{visual.next}</span>
           </div>
           <footer>✓ {visual.status}</footer>
         </div>
       );
-    case "procurement-email":
+    case "inbound-question":
       return (
         <div className="story-ui story-email-ui" aria-hidden>
           <header className="story-ui-bar">
             <strong>Inbox</strong>
-            <span>5:27 AM</span>
+            <span>New</span>
           </header>
           <div className="story-email-body">
-            <span className="story-avatar">JH</span>
+            <span className="story-avatar">Q</span>
             <p>
               <strong>{visual.sender}</strong>
               <small>{visual.subject}</small>
             </p>
           </div>
-          <footer>
-            <strong>{visual.questions}</strong>
-            questions need answers
-          </footer>
+          <footer>{visual.status}</footer>
         </div>
       );
     case "answers-found":
       return (
         <div className="story-ui story-answers-ui" aria-hidden>
           <header className="story-ui-bar">
-            <strong>Grok checked the sources</strong>
+            <strong>Sources checked</strong>
             <span>{visual.status}</span>
           </header>
           <ul>
@@ -240,55 +237,38 @@ function LiveVisual({ visual }: { visual: StoryVisual }) {
           <footer>✓ {visual.status}</footer>
         </div>
       );
-    case "account-research":
+    case "project-scan":
       return (
         <div className="story-ui story-research-ui" aria-hidden>
           <header className="story-ui-bar">
-            <strong>{visual.account}</strong>
-            <span>Researching</span>
+            <strong>{visual.title}</strong>
+            <span>Scanning</span>
           </header>
-          <div className="story-source-orbit">
-            <strong>{visual.signal}</strong>
-            {visual.sources.map((source) => (
-              <span key={source}>{source}</span>
+          <ul className="story-scan-list">
+            {visual.items.map((item) => (
+              <li key={item.name}>
+                <strong>{item.name}</strong>
+                <small>{item.state}</small>
+              </li>
             ))}
-          </div>
-          <footer>Public evidence found</footer>
+          </ul>
         </div>
       );
-    case "three-why":
+    case "work-grouped":
       return (
         <div className="story-ui story-why-ui" aria-hidden>
           <header className="story-ui-bar">
-            <strong>Account hypothesis</strong>
-            <span>Built from evidence</span>
+            <strong>Grouped by project</strong>
+            <span>From this week</span>
           </header>
           <ol>
-            {visual.items.map((item) => (
-              <li key={item.label}>
-                <span>{item.label}</span>
-                <strong>{item.answer}</strong>
+            {visual.groups.map((group) => (
+              <li key={group.project}>
+                <span>{group.project}</span>
+                <strong>{group.note}</strong>
               </li>
             ))}
           </ol>
-        </div>
-      );
-    case "outreach-ready":
-      return (
-        <div className="story-ui story-outreach-ui" aria-hidden>
-          <header className="story-ui-bar">
-            <strong>{visual.person}</strong>
-          </header>
-          <div>
-            {visual.channels.map((channel, index) => (
-              <p key={channel}>
-                <span>{index + 1}</span>
-                <strong>{channel}</strong>
-                <small>Personalized</small>
-              </p>
-            ))}
-          </div>
-          <footer>{visual.status}</footer>
         </div>
       );
     default: {
