@@ -2885,18 +2885,6 @@ button:active:not(:focus-visible),
   border-radius: 3px;
 }
 
-.leave-seat {
-  margin: 0;
-  padding: 0.7rem 0.95rem;
-  background: var(--ink);
-  color: var(--paper);
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .leave-line {
   margin: 0;
   padding: 1rem 0.95rem 1.1rem;

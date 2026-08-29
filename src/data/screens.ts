@@ -1,6 +1,14 @@
-import type { JobId } from "./types";
+import type { ClipId, JobId } from "./types";
 
-export type SiteKind = "granola" | "gmail" | "gdoc" | "sheets";
+export type SiteKind =
+  | "granola"
+  | "figma"
+  | "gmail"
+  | "gdoc"
+  | "linkedin"
+  | "research"
+  | "page"
+  | "clip";
 
 export type ChromeTab = {
   id: string;
@@ -14,60 +22,92 @@ export type ComputerBeat = {
   path?: string;
   title: string;
   site: SiteKind;
+  clip?: ClipId;
   tabs: ChromeTab[];
 };
 
 const granola = { id: "granola", host: "granola.app", label: "Granola" };
+const figma = { id: "figma", host: "figma.com", label: "Figma" };
 const gmail = { id: "gmail", host: "mail.google.com", label: "Gmail" };
 const gdoc = { id: "gdoc", host: "docs.google.com", label: "Docs" };
-const sheets = { id: "sheets", host: "docs.google.com", label: "Sheets" };
+const linkedin = {
+  id: "linkedin",
+  host: "www.linkedin.com",
+  label: "LinkedIn",
+};
+const web = { id: "web", host: "acme.com", label: "Acme" };
 
 export const SCREENS: Record<JobId, Record<string, ComputerBeat>> = {
-  "implementation-plan": {
+  "standardize-room": {
     m1: {
-      pill: "Opening the call notes",
+      pill: "Opening Granola",
       host: "granola.app",
-      path: "/notes/harbor-implementation",
-      title: "Harbor implementation working session",
+      path: "/notes/acme-workday",
+      title: "Acme <> Workday",
       site: "granola",
-      tabs: [granola, gdoc, gmail],
+      tabs: [granola, figma, gmail],
     },
     m2: {
-      pill: "Grouping decisions",
+      pill: "In Granola",
       host: "granola.app",
-      path: "/notes/harbor-implementation",
-      title: "Harbor implementation working session",
+      path: "/notes/acme-workday",
+      title: "Acme <> Workday",
       site: "granola",
-      tabs: [granola, gdoc, gmail],
+      tabs: [granola, figma, gmail],
     },
     m3: {
-      pill: "Writing the plan",
-      host: "docs.google.com",
-      path: "/document/d/harbor-plan",
-      title: "Harbor implementation plan",
-      site: "gdoc",
-      tabs: [granola, gdoc, gmail],
+      pill: "Pulling Granola, still on the call",
+      host: "granola.app",
+      path: "/notes/acme-workday",
+      title: "Acme <> Workday",
+      site: "clip",
+      clip: "03-slides-granola",
+      tabs: [granola, figma, gmail],
     },
     m4: {
-      pill: "Plan draft parked",
-      host: "docs.google.com",
-      path: "/document/d/harbor-plan",
-      title: "Harbor implementation plan",
-      site: "gdoc",
-      tabs: [granola, gdoc, gmail],
+      pill: "Writing their discovery into the deck",
+      host: "figma.com",
+      path: "/file/acme-next-meeting",
+      title: "Acme next meeting",
+      site: "figma",
+      tabs: [granola, figma, gmail],
     },
     m5: {
+      pill: "Drafting the one-pager",
+      host: "figma.com",
+      path: "/file/acme-leave-behind",
+      title: "Acme one-pager",
+      site: "figma",
+      tabs: [granola, figma, gmail],
+    },
+    m6: {
+      pill: "Building the inside note",
+      host: "figma.com",
+      path: "/file/acme-champion-packet",
+      title: "Inside note",
+      site: "figma",
+      tabs: [granola, figma, gmail],
+    },
+    m7: {
       pill: "Drafting in Gmail, not sent",
       host: "mail.google.com",
       path: "/mail/u/0/#drafts",
       title: "Drafts",
       site: "gmail",
-      tabs: [granola, gdoc, gmail],
+      tabs: [granola, figma, gmail],
+    },
+    m8: {
+      pill: "Drafting in Gmail, not sent",
+      host: "mail.google.com",
+      path: "/mail/u/0/#drafts",
+      title: "Drafts",
+      site: "gmail",
+      tabs: [granola, figma, gmail],
     },
   },
-  "sourced-answer": {
+  "legal-redlines": {
     m1: {
-      pill: "Opening the question",
+      pill: "Opening Gmail",
       host: "mail.google.com",
       path: "/mail/u/0/#inbox",
       title: "Inbox",
@@ -75,18 +115,19 @@ export const SCREENS: Record<JobId, Record<string, ComputerBeat>> = {
       tabs: [gmail, gdoc],
     },
     m2: {
-      pill: "Checking product and internal notes",
-      host: "docs.google.com",
-      path: "/document/d/harbor-sources",
-      title: "Harbor sources",
-      site: "gdoc",
+      pill: "Drafting so you do not chase billing",
+      host: "mail.google.com",
+      path: "/mail/u/0/#inbox",
+      title: "Inbox",
+      site: "clip",
+      clip: "01-morning-inbox",
       tabs: [gmail, gdoc],
     },
     m3: {
-      pill: "Writing the sourced reply",
+      pill: "Drafting the morning reply, not sent",
       host: "docs.google.com",
-      path: "/document/d/harbor-reply",
-      title: "Harbor sourced reply",
+      path: "/document/d/acme-invoices",
+      title: "Acme invoices INV-0080 · INV-0081",
       site: "gdoc",
       tabs: [gmail, gdoc],
     },
@@ -107,38 +148,71 @@ export const SCREENS: Record<JobId, Record<string, ComputerBeat>> = {
       tabs: [gmail, gdoc],
     },
   },
-  "project-brief": {
+  "attach-engine": {
     m1: {
-      pill: "Scanning active projects",
-      host: "docs.google.com",
-      path: "/spreadsheets/d/harbor-week",
-      title: "Harbor weekly project brief",
-      site: "sheets",
-      tabs: [sheets, gdoc],
+      pill: "Researching the account",
+      host: "acme.com",
+      path: "/careers/staff-sre",
+      title: "Staff SRE · Workday",
+      site: "research",
+      tabs: [web, gdoc, linkedin, gmail],
     },
     m2: {
-      pill: "Grouping work by project",
-      host: "docs.google.com",
-      path: "/document/d/harbor-week-notes",
-      title: "Harbor week notes",
-      site: "gdoc",
-      tabs: [sheets, gdoc],
+      pill: "Pulling public evidence of the pain",
+      host: "acme.com",
+      path: "/status",
+      title: "Acme status",
+      site: "clip",
+      clip: "02-prospecting-pg",
+      tabs: [web, gdoc, linkedin, gmail],
     },
     m3: {
-      pill: "Building the review table",
+      pill: "Writing the 3-why hypothesis",
       host: "docs.google.com",
-      path: "/spreadsheets/d/harbor-week",
-      title: "Harbor weekly project brief",
-      site: "sheets",
-      tabs: [sheets, gdoc],
+      path: "/document/d/acme-3-why",
+      title: "Acme 3-why",
+      site: "gdoc",
+      tabs: [web, gdoc, linkedin, gmail],
     },
     m4: {
-      pill: "Table parked. Nothing sent",
+      pill: "Naming who would care",
       host: "docs.google.com",
-      path: "/spreadsheets/d/harbor-week",
-      title: "Harbor weekly project brief",
-      site: "sheets",
-      tabs: [sheets, gdoc],
+      path: "/document/d/acme-3-why",
+      title: "Acme 3-why",
+      site: "gdoc",
+      tabs: [web, gdoc, linkedin, gmail],
+    },
+    m5: {
+      pill: "Drafting LinkedIn, not sent",
+      host: "www.linkedin.com",
+      path: "/messaging/compose",
+      title: "Message",
+      site: "linkedin",
+      tabs: [web, gdoc, linkedin, gmail],
+    },
+    m6: {
+      pill: "Drafting in Gmail, not sent",
+      host: "mail.google.com",
+      path: "/mail/u/0/#drafts",
+      title: "Drafts",
+      site: "gmail",
+      tabs: [web, gdoc, linkedin, gmail],
+    },
+    m7: {
+      pill: "Building a page for this account",
+      host: "acme.workday.dev",
+      path: "/acme-sev2",
+      title: "For Acme platform",
+      site: "page",
+      tabs: [web, gdoc, linkedin, gmail],
+    },
+    m8: {
+      pill: "Drafts parked. Nothing sent",
+      host: "mail.google.com",
+      path: "/mail/u/0/#drafts",
+      title: "Drafts",
+      site: "gmail",
+      tabs: [web, gdoc, linkedin, gmail],
     },
   },
 };

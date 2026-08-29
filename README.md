@@ -4,7 +4,11 @@ Passworded site. Grok Bot from SpaceXAI, for Workday GTM.
 
 ## What it is
 
-Three named agents on one page. Launch turns an implementation call into a plan. Relay turns a hard question into a sourced draft. Brief turns a weekly review into a project table. Each job has a short problem statement, scene-in-time frames, and an interactive Grok Bot demo. Below that: a comparison table and the public Grok Bot quote wall.
+Three Workday GTM use cases on one page. Room Ops updates the open deck
+during discovery, Paper drafts sourced answers to overnight procurement
+questions, and Outbound researches target accounts before drafting personalized
+outreach. Each job includes a problem statement, storyboard, and interactive
+Grok Bot demo.
 
 ## Run locally
 

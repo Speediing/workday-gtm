@@ -192,10 +192,10 @@ export function HeroDemo() {
     <>
       <div className="hero-copy">
         <p className="eyebrow">Workday x SpaceXAI</p>
-        <h1>Agents that keep customer work moving.</h1>
+        <h1>The agents that work while your reps sell.</h1>
         <p className="hero-intro">
-          Every agent has its own computer and starts from work signals. A
-          call, a hard question, a Friday review. You decide what gets sent.
+          Grok Bot listens to calls, watches the inbox, and researches accounts
+          in the background. Work triggers it — not another prompt.
         </p>
         <div className="hero-phone-jobs" aria-label="Choose a Grok Bot job">
           {HERO_JOBS.map((item, index) => (

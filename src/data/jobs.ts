@@ -1,292 +1,422 @@
-import type { CroJob } from "./types";
+import type { Artifact, CroJob, SlideCard } from "./types";
+
+export const ACME_TAIL_SLIDES: SlideCard[] = [
+  {
+    n: 4,
+    kicker: "They said · 4 min ago",
+    voice: "them",
+    title: "The Sev-2",
+    body: "We cannot tell a Sev-2 story across HCM and Financial Management without stitching tools.",
+  },
+  {
+    n: 5,
+    kicker: "Mapped live",
+    voice: "us",
+    title: "Start with HCM + Financial Management",
+    body: "Same team that already feels the outage. Start there this quarter.",
+  },
+  {
+    n: 6,
+    kicker: "They said · 4 min ago",
+    voice: "them",
+    title: "The security bar",
+    body: "Security will not let another agent in without SSO and an audit trail.",
+  },
+  {
+    n: 7,
+    kicker: "Mapped live",
+    voice: "us",
+    title: "SSO, then Adaptive Planning",
+    body: "Named on this call. One team. Adaptive Planning after they see a faster fix.",
+  },
+];
+
+export const ACME_PROCUREMENT: Extract<Artifact, { kind: "redlines" }> = {
+  kind: "redlines",
+  title: "Acme procurement · overnight invoices",
+  paperTitle: "Their questions",
+  from: "Jordan Hale, Acme procurement · 5:27am your time",
+  marks: [
+    {
+      text: "Why the $427.51 catch-up, and will it happen again?",
+      note: "Billing-system miss on our side, 1 July–17 July. INV-0081 is the one-time correction. Gap is closed.",
+      take: true,
+    },
+    {
+      text: "Can the admin portal be trusted? Any more retro charges?",
+      note: "Dashboard for usage. Invoices under Billing are the billed record. Flag anything from a closed period before it is billed.",
+      take: true,
+    },
+    {
+      text: "How was the $715.55 invoice calculated?",
+      note: "Two mid-cycle product additions, HCM then Financial Management, not one full-year charge. Proration runs through 17 July 2027.",
+      take: true,
+    },
+    {
+      text: "Spend caps, PO invoicing, and approval limits.",
+      note: "The billing record has the team-wide cap. Approval limits and annual PO terms stay on the order form. Do not re-trade that from this inbox.",
+      take: false,
+    },
+  ],
+  reply: {
+    to: "Jordan Hale, Acme procurement",
+    subject: "Acme invoices INV-0080 and INV-0081. Answers you can send today",
+    body: "Hi Jordan,\n\nINV-0081 ($427.51) is a one-time catch-up for usage 1–17 July that our billing system missed. Not new usage. Gap is closed. No further retros expected; I would flag any closed-period item before it billed.\n\nDashboard = usage. Billing invoices = what was billed. Those should now match. Send any line that does not.\n\nINV-0080 ($715.55) is two mid-cycle product additions, HCM then Financial Management, not a full-year charge. Renewal date does not change.\n\nThe team-wide spend cap is in the billing record. Approval limits and annual PO terms stay on the order form.\n\nHappy to jump on a call before these are processed.\n\nBest,",
+  },
+};
+
+export const ACME_OUTBOUND: Extract<Artifact, { kind: "outbound" }> = {
+  kind: "outbound",
+  title: "Acme outbound",
+  account: "Acme",
+  hypothesis: [
+    {
+      k: "Why us",
+      body: "On-call still stitches Prometheus, Grafana, and a log pile to name a Sev-2. HCM + Financial Management is the start, not a catalog pitch.",
+    },
+    {
+      k: "Why now",
+      body: "Public incident 14 days ago. 47 minutes to name the failing service. Staff SRE JD asks for stitching HCM and Financial Management. The pain is current.",
+    },
+    {
+      k: "Why them",
+      body: "VP Eng owns time-to-fix. Platform director lives in that stitch. They are the ones who felt the last Sev-2.",
+    },
+  ],
+  evidence: [
+    {
+      source: "Status page · 14 days ago",
+      finding:
+        "Sev-2, 47 minutes to name the failing service. Postmortem language is still 'we jumped three tools.'",
+    },
+    {
+      source: "Careers · Staff SRE",
+      finding:
+        "JD asks for 'experience stitching HCM and Financial Management across teams.' Open role, posted this month.",
+    },
+    {
+      source: "Engineering blog",
+      finding:
+        "We outgrew homegrown dashboards. No named replacement. That is the gap.",
+    },
+  ],
+  targets: [
+    {
+      name: "Priya Shah",
+      role: "VP Engineering",
+      why: "Owns time-to-fix. Named in the SRE hiring chain.",
+    },
+    {
+      name: "Chris Okonkwo",
+      role: "Director, Platform",
+      why: "Team is the one stitching HCM and Financial Management today.",
+    },
+  ],
+  page: {
+    headline: "Acme's Sev-2 is a stitching problem",
+    body: "The last incident and the Staff SRE JD say the same thing. Start HCM + Financial Management in the platform team. Adaptive Planning after that team has a week-3 number. Not a product tour.",
+  },
+};
 
 export const JOBS: CroJob[] = [
   {
-    id: "implementation-plan",
+    id: "standardize-room",
     number: 1,
-    title: "Turn an implementation call into a plan",
-    trigger: "An implementation call starts",
-    backgroundAction: "Listening to the call and grouping the notes",
+    title: "Update decks in real time",
+    trigger: "A customer call starts",
+    backgroundAction: "Listening to discovery + updating the open deck",
     problem:
-      "Kickoff notes land in chat, a doc, and someone's head. The customer leaves without a plan they can run.",
+      "A generic deck is a pitch they have already sat through. The wow is hearing their own discovery back, then seeing the next product named for their team, while they are still on.",
     botJob:
-      "Launch stays on the call, groups the decisions, and drafts the implementation plan. You review it before it goes out.",
+      "Granola is in while you are on. The last slides become their words and a product suggestion that fits this room. Not last quarter's story.",
     storyboard: [
       {
         when: "Minute 8",
-        label: "The implementation call is live. Launch is already in the notes.",
+        label: "The call starts. Grok is already listening — no prompt needed.",
         scene: "call",
         visual: {
           kind: "live-call",
-          title: "Harbor implementation working session",
+          title: "Acme discovery",
           people: [
-            { initials: "YO", name: "You" },
-            { initials: "CU", name: "Customer" },
-            { initials: "PA", name: "Partner" },
+            { initials: "JW", name: "You" },
+            { initials: "PS", name: "Priya" },
+            { initials: "CO", name: "Chris" },
           ],
         },
       },
       {
-        when: "Minute 24",
-        label: "Notes get grouped by decision, not by who talked.",
+        when: "Minute 22",
+        label: "Their exact language lands in the transcript.",
+        scene: "demo",
+        visual: {
+          kind: "live-transcript",
+          timestamp: "14:31",
+          speaker: "Priya",
+          quote:
+            "We stitch HCM and Financial Management together every time there is a Sev-2.",
+          signals: ["Sev-2", "HCM + Financial Management"],
+        },
+      },
+      {
+        when: "Minute 31",
+        label: "Grok maps it to product and rewrites the open deck.",
         scene: "notes",
         visual: {
-          kind: "meeting-notes",
-          timestamp: "14:24",
-          speaker: "Note",
-          note: "Customer asked for a phased go-live. Payroll first. Time and absence next. Security wants SSO named before any extra products.",
-          tags: ["Phased go-live", "Payroll first", "SSO first"],
+          kind: "deck-update",
+          eyebrow: "Their words",
+          headline: "A Sev-2 is a stitching problem",
+          product: "Start with HCM + Financial Management",
+          status: "3 slides updated",
         },
       },
       {
-        when: "Minute 36",
-        label: "Launch drafts the plan while the call is still open.",
+        when: "Minute 35",
+        label: "Present the new slides before the call ends.",
         scene: "deck",
-        visual: {
-          kind: "plan-draft",
-          eyebrow: "Draft plan",
-          headline: "Harbor implementation plan",
-          next: "Tuesday working session",
-          status: "Owners and phases filled in",
-        },
-      },
-      {
-        when: "After the call",
-        label: "The implementation plan is ready to review.",
-        scene: "send",
-        artifact: {
-          kind: "one-pager",
-          title: "Harbor implementation plan",
-          eyebrow: "Draft · not sent",
-          sections: [
-            {
-              heading: "What we decided",
-              body: "Phased go-live. Payroll is the first workstream. Time and absence follow after payroll is stable. SSO is named before any extra products.",
-            },
-            {
-              heading: "Phase 1 · payroll",
-              body: "Config, tenant access, and the first payroll parallel run. Customer ops owns the sample group. We own the build checklist.",
-            },
-            {
-              heading: "Phase 2 · time and absence",
-              body: "Starts after the first clean payroll run. Same working group. No extra products in this phase.",
-            },
-            {
-              heading: "Next working session",
-              body: "Tuesday. Bring the payroll sample group and the security owner for SSO. This draft stays with you until you send it.",
-            },
-          ],
-        },
+        slides: ACME_TAIL_SLIDES,
       },
     ],
     unlock:
-      "A dated plan with owners, phases, and the next working session.",
+      "Hyper-personalized discovery on the slide, plus a tailored product next step, while they are still on.",
     outcome:
-      "The call ends with a plan the customer can use next week.",
+      "One live call becomes a customer-specific deck — before the call ends.",
+    clips: ["03-slides-granola"],
     demo: {
-      title: "Launch",
-      subtitle: "Implementation call · plan draft",
+      title: "Room Ops",
+      subtitle: "Live discovery · slides in their words",
       participants: [
         { id: "you", name: "You", role: "you" },
         {
-          id: "launch",
-          name: "Launch",
+          id: "room",
+          name: "Room Ops",
           role: "bot",
-          persona: "Sits in the implementation call and drafts the customer plan",
-          color: "#E25A14",
+          persona: "Turns live discovery into slides that wow this room",
+          color: "#34C759",
+        },
+        {
+          id: "slides",
+          name: "Slides",
+          role: "bot",
+          persona: "Maps what they just said to a product suggestion for this team",
+          color: "#007AFF",
         },
       ],
       messages: [
         {
           id: "m1",
-          from: "launch",
+          from: "room",
           kind: "routine",
-          body: "Harbor implementation call started. I am in the notes and watching for decisions, owners, and the next session. The plan stays a draft.",
+          body: "Customer call started. I am following Granola and watching for their language, blockers, and product signals. The open deck stays untouched until there is something worth changing.",
         },
         {
           id: "m2",
-          from: "launch",
+          from: "room",
           kind: "text",
-          body: "Grouped notes so far. Phased go-live. Payroll first. Time and absence next. SSO before any extra products. Writing that into the plan now.",
+          body: "Priya just named the Sev-2 and the security bar in her words. Mapping both to the last slides now while the call is still live.",
         },
         {
           id: "m3",
-          from: "launch",
+          from: "room",
           kind: "text",
-          body: "Still on the call. The Tuesday session is the next step. I put the sample group and the security owner on that invite line.",
+          body: "Still on. Granola 14:31. Their discovery is the slide. Sev-2 and the security bar in their words, then the product that fits this team. They should feel known, not pitched.",
         },
         {
           id: "m4",
-          from: "launch",
+          from: "slides",
           kind: "draft",
-          draftLabel: "Implementation plan · not sent",
+          draftLabel: "Last slides of the open deck · still on",
+          artifact: {
+            kind: "slides",
+            title: "What we heard",
+            cards: ACME_TAIL_SLIDES,
+          },
+        },
+        {
+          id: "m5",
+          from: "room",
+          kind: "draft",
+          draftLabel: "One-pager they can forward",
           artifact: {
             kind: "one-pager",
-            title: "Harbor implementation plan",
-            eyebrow: "Draft · not sent",
+            title: "Acme one-pager",
+            eyebrow: "One-pager",
             sections: [
               {
-                heading: "What we decided",
-                body: "Phased go-live. Payroll is the first workstream. Time and absence follow after payroll is stable. SSO is named before any extra products.",
+                heading: "What we covered",
+                body: "Start with HCM + Financial Management. Security needs SSO and an audit trail. Adaptive Planning as a one-team trial, not a company-wide rollout.",
               },
               {
-                heading: "Phase 1 · payroll",
-                body: "Config, tenant access, and the first payroll parallel run. Customer ops owns the sample group. We own the build checklist.",
+                heading: "Security path",
+                body: "SSO and audit trail named before any extra products. The security lead from this call stays on the next meeting.",
               },
               {
-                heading: "Phase 2 · time and absence",
-                body: "Starts after the first clean payroll run. Same working group. No extra products in this phase.",
+                heading: "Trial",
+                body: "Adaptive Planning in the same team that starts HCM + Financial Management. Week-3 time-to-fix is the gate. Expand only after that number.",
               },
               {
-                heading: "Next working session",
-                body: "Tuesday. Bring the payroll sample group and the security owner for SSO.",
+                heading: "What we need from you",
+                body: "Tuesday with your contact plus a security co-owner. Bring the contract owner if legal will slow SSO.",
               },
             ],
           },
         },
         {
-          id: "m5",
-          from: "launch",
+          id: "m6",
+          from: "room",
+          kind: "draft",
+          draftLabel: "Note they can send inside",
+          artifact: {
+            kind: "packet",
+            title: "Forward this inside Acme",
+            fields: [
+              {
+                label: "Problem in their words",
+                value:
+                  "We cannot tell a Sev-2 story across HCM and Financial Management without stitching tools, and security will not let another agent in without SSO and an audit trail.",
+              },
+              {
+                label: "Why now",
+                value:
+                  "The team already agreed to start HCM + Financial Management. Adaptive Planning is useful in that same week-3 window, not after a product tour next quarter.",
+              },
+              {
+                label: "Risks already named",
+                value:
+                  "SSO + audit trail. Legal may slow the contract. Cost came up once and no other product is in the room.",
+              },
+              {
+                label: "Exact ask for next Tuesday",
+                value:
+                  "30 minutes. Your contact + a security co-owner. Dated SSO path. Written Adaptive Planning trial scope for one team.",
+              },
+            ],
+          },
+        },
+        {
+          id: "m7",
+          from: "room",
+          kind: "draft",
+          draftLabel: "Gmail to your contact",
+          artifact: {
+            kind: "gmail",
+            title: "Forward to your contact",
+            to: "Acme contact",
+            subject:
+              "Acme / Workday. Tuesday packet (SSO, Adaptive Planning trial)",
+            body: "Forwarding the internal note from today's room. Problem is in your words. Tuesday ask is your contact + a security co-owner, a dated SSO path, and a one-team Adaptive Planning trial. Nothing else is in the ask.",
+          },
+        },
+        {
+          id: "m8",
+          from: "room",
           kind: "system",
-          body: "Nothing sent. The plan stays a draft until you tap Send.",
+          body: "Nothing sent. Deck, one-pager, note, and Gmail stay drafts until you tap Send.",
         },
       ],
     },
   },
   {
-    id: "sourced-answer",
+    id: "legal-redlines",
     number: 2,
-    title: "Turn a hard question into a sourced draft",
+    title: "Find product and internal answers fast",
     trigger: "A customer question lands",
-    backgroundAction: "Checking product docs and internal notes",
+    backgroundAction: "Searching product knowledge + internal company context",
     problem:
-      "A hard question sits while product, CS, and the seller all get tagged. The customer waits.",
+      "A customer question can turn into a week of Slack across product, billing, finance, and legal. The seller waits, the customer waits, and internal experts lose time repeating answers.",
     botJob:
-      "Relay finds the product answer and the matching internal note, then drafts a reply with sources. You send it.",
+      "Grok Bot watches for the question, searches product knowledge and internal company context, and drafts a sourced reply. The seller reviews instead of chasing teams.",
     storyboard: [
       {
-        when: "Question lands",
-        label: "A customer question comes in. Relay starts before you open it.",
+        when: "5:27am your time",
+        label: "Four questions land. Grok starts while you are asleep.",
         scene: "notes",
         visual: {
-          kind: "inbound-question",
-          sender: "Customer ops",
-          subject: "What can start before the security review?",
-          status: "Needs a sourced answer",
+          kind: "procurement-email",
+          sender: "Jordan · Acme procurement",
+          subject: "Questions on INV-0080 + 0081",
+          questions: 4,
         },
       },
       {
-        when: "Sources checked",
-        label: "Product docs and internal notes are already open.",
+        when: "7:42am",
+        label: "Grok has already found and checked every answer.",
         scene: "inspect",
         visual: {
           kind: "answers-found",
           sources: [
-            { name: "Implementation guide", answer: "Planning can start" },
-            { name: "Security checklist", answer: "Production access waits" },
-            { name: "Project notes", answer: "First working group named" },
+            { name: "Billing", answer: "Catch-up explained" },
+            { name: "Finance", answer: "Proration checked" },
+            { name: "Packaging", answer: "Limits confirmed" },
           ],
-          status: "Sources attached",
+          status: "4 / 4 answered",
         },
       },
       {
-        when: "Draft waiting",
-        label: "The sourced reply is ready. Nothing is sent.",
+        when: "7:44am",
+        label: "A sourced reply is waiting for one-click approval.",
         scene: "send",
-        artifact: {
-          kind: "one-pager",
-          title: "Harbor sourced reply",
-          eyebrow: "Draft · not sent",
-          sections: [
-            {
-              heading: "The question",
-              body: "Customer ops asked which rollout steps can start before the security review is complete.",
-            },
-            {
-              heading: "The answer",
-              body: "Planning, owners, the first working group, and the config checklist can start now. Production access waits for the security review.",
-            },
-            {
-              heading: "Sources",
-              body: "The implementation guide, security checklist, and current project notes.",
-            },
-            {
-              heading: "What we need back",
-              body: "The working group owner and the security review date. The reply stays a draft until you send it.",
-            },
-          ],
+        visual: {
+          kind: "reply-ready",
+          to: "Jordan Hale",
+          subject: "INV-0080 + 0081 · answers",
+          status: "Ready to approve",
         },
       },
     ],
-    unlock: "A sourced draft with the product answer and the internal note.",
-    outcome: "A sourced draft is waiting. Nothing is sent until you say so.",
+    unlock:
+      "Invoice questions in. A sendable draft out. No week of internal delay.",
+    outcome:
+      "Grok finds the product and internal context, then drafts the answer — no Slack chase and no seller time wasted.",
+    clips: ["01-morning-inbox"],
     demo: {
-      title: "Relay",
-      subtitle: "Customer question · sourced draft",
+      title: "Paper",
+      subtitle: "Procurement questions · draft waiting",
       participants: [
         { id: "you", name: "You", role: "you" },
         {
-          id: "relay",
-          name: "Relay",
+          id: "paper",
+          name: "Paper",
           role: "bot",
-          persona: "Finds product and internal answers, then drafts the reply",
-          color: "#0B5CAB",
+          persona: "Reads overnight procurement mail and drafts the reply so you do not chase billing",
+          color: "#FF375F",
         },
       ],
       messages: [
         {
           id: "m1",
-          from: "relay",
+          from: "paper",
           kind: "routine",
-          body: "New Harbor question from customer ops. They want to know what can start before security review. Checking the approved rollout docs.",
+          body: "New Acme procurement thread detected at 5:27am. Two invoices, four questions. Checking billing, finance, and packaging while you are offline.",
         },
         {
           id: "m2",
-          from: "relay",
+          from: "paper",
           kind: "text",
-          body: "The implementation guide says planning can start. The security checklist holds production access. Project notes already name the first working group.",
+          body: "Already read it overnight. Four questions. Draft is waiting. You do not need to ping billing, finance, or legal for this one. Nothing sent.",
         },
         {
           id: "m3",
-          from: "relay",
+          from: "paper",
           kind: "draft",
-          draftLabel: "Sourced reply · not sent",
-          artifact: {
-            kind: "one-pager",
-            title: "Harbor sourced reply",
-            eyebrow: "Draft · not sent",
-            sections: [
-              {
-                heading: "The question",
-                body: "Customer ops asked which rollout steps can start before the security review is complete.",
-              },
-              {
-                heading: "The answer",
-                body: "Planning, owners, the first working group, and the config checklist can start now. Production access waits for the security review.",
-              },
-              {
-                heading: "Sources",
-                body: "The implementation guide, security checklist, and current project notes.",
-              },
-            ],
-          },
+          draftLabel: "Questions + reply",
+          artifact: ACME_PROCUREMENT,
         },
         {
           id: "m4",
-          from: "relay",
+          from: "paper",
           kind: "draft",
           draftLabel: "Gmail reply · not sent",
           artifact: {
             kind: "gmail",
-            title: "Reply to Harbor customer ops",
-            to: "Harbor customer ops",
-            subject: "Steps that can start before security review",
-            body: "Hi,\n\nPlanning, owners, the first working group, and the config checklist can start now. Production access waits until the security review is complete.\n\nI checked the implementation guide, security checklist, and current project notes.\n\nSend the working group owner and the security review date and we will update the plan.\n\nDraft only. Nothing sent yet.",
+            title: "Reply to Acme procurement",
+            to: ACME_PROCUREMENT.reply.to,
+            subject: ACME_PROCUREMENT.reply.subject,
+            body: ACME_PROCUREMENT.reply.body,
           },
         },
         {
           id: "m5",
-          from: "relay",
+          from: "paper",
           kind: "system",
           body: "Nothing sent. The reply stays a draft until you tap Send.",
         },
@@ -294,149 +424,185 @@ export const JOBS: CroJob[] = [
     },
   },
   {
-    id: "project-brief",
+    id: "attach-engine",
     number: 3,
-    title: "Turn a weekly review into a project brief",
-    trigger: "Friday review comes around",
-    backgroundAction: "Scanning active work and grouping it by project",
+    title: "Pipeline generation is now easier than ever",
+    trigger: "A target account enters your list",
+    backgroundAction: "Researching signals + building personalized outreach",
     problem:
-      "The week lives in chats. Leadership wants one table by project, not a pile of threads.",
+      "Cold outbound is a generic sequence. No research, no hypothesis, no evidence, and a name from a list. Pipeline that lands starts with why this account, why now, and who would care.",
     botJob:
-      "Brief reads the week's work, groups it by project, and drafts the review table.",
+      "When an account enters your target list, Grok Bot researches it, writes a 3-why, finds evidence of the pain, names who cares, then drafts LinkedIn, email, and a page. Draft only. You send.",
     storyboard: [
       {
-        when: "Friday morning",
-        label: "Brief scans the active projects before the review.",
+        when: "No meeting yet",
+        label: "Acme hits your target list. Grok starts without a prompt.",
         scene: "inspect",
         visual: {
-          kind: "project-scan",
-          title: "Active Harbor work",
+          kind: "account-research",
+          account: "Acme",
+          sources: ["Status page", "Careers", "Engineering"],
+          signal: "47-minute Sev-2",
+        },
+      },
+      {
+        when: "90 seconds later",
+        label: "It turns public evidence into a sharp 3-why.",
+        scene: "notes",
+        visual: {
+          kind: "three-why",
           items: [
-            { name: "Payroll go-live", state: "Moved this week" },
-            { name: "Absence rollout", state: "Waiting on sample group" },
-            { name: "Reporting pack", state: "Draft in review" },
+            { label: "Why us", answer: "HCM + Financial Management" },
+            { label: "Why now", answer: "Sev-2 · 14d ago" },
+            { label: "Why them", answer: "Own time-to-fix" },
           ],
         },
       },
       {
-        when: "Grouped",
-        label: "Work is stacked by project, not by chat.",
+        when: "Campaign ready",
+        label: "The right buyer gets three personalized drafts.",
         scene: "map",
         visual: {
-          kind: "work-grouped",
-          groups: [
-            {
-              project: "Payroll go-live",
-              note: "Parallel run notes cleaned. Next is the sample group sign-off.",
-            },
-            {
-              project: "Absence rollout",
-              note: "Config is ready. Blocked on the sample group list.",
-            },
-            {
-              project: "Reporting pack",
-              note: "First draft is in review. No send until you say so.",
-            },
-          ],
+          kind: "outreach-ready",
+          person: "Priya Shah · VP Engineering",
+          channels: ["LinkedIn", "Email", "Acme page"],
+          status: "3 drafts · 0 sent",
         },
       },
       {
-        when: "Review table",
-        label: "The project brief is a table you can take into the meeting.",
+        when: "Ready for your click",
+        label:
+          "Research, message, and account page — all built from their business.",
         scene: "send",
-        artifact: {
-          kind: "table",
-          title: "Harbor weekly project brief",
-          caption: "Draft for Friday review. Edit before you send.",
-          columns: ["Project", "What moved", "Stuck on", "Next"],
-          rows: [
-            [
-              "Payroll go-live",
-              "Parallel run notes cleaned",
-              "Sample group sign-off",
-              "Tuesday working session",
-            ],
-            [
-              "Absence rollout",
-              "Config ready",
-              "Sample group list",
-              "Hold until payroll is clean",
-            ],
-            [
-              "Reporting pack",
-              "First draft written",
-              "Your review",
-              "Send after you edit",
-            ],
-          ],
-        },
+        artifact: ACME_OUTBOUND,
       },
     ],
-    unlock: "One project table for Friday. You edit, then send.",
-    outcome: "The weekly review starts from a project table, not a chat dump.",
+    unlock:
+      "Research, a 3-why, evidence, named buyers, and sendable drafts. Nothing fires until you tap.",
+    outcome:
+      "One account in. Research, a 3-why, named buyers, and personalized outreach out.",
+    clips: ["02-prospecting-pg"],
     demo: {
-      title: "Brief",
-      subtitle: "Weekly review · project table",
+      title: "Outbound",
+      subtitle: "Research to a first meeting",
       participants: [
         { id: "you", name: "You", role: "you" },
         {
-          id: "brief",
-          name: "Brief",
+          id: "attach",
+          name: "Outbound",
           role: "bot",
-          persona: "Reads the week's work and drafts the project review table",
-          color: "#0F7A5A",
+          persona: "Researches the account, writes the 3-why, and drafts the outreach",
+          color: "#FF9500",
         },
       ],
       messages: [
         {
           id: "m1",
-          from: "brief",
+          from: "attach",
           kind: "routine",
-          body: "Friday review window. Scanning active Harbor work and grouping it by project. Drafts only.",
+          body: "Acme entered your target-account list. No meeting yet. Researching the account, building the 3-why, and finding the people who would feel the pain. Drafts only.",
         },
         {
           id: "m2",
-          from: "brief",
+          from: "attach",
           kind: "text",
-          body: "Three projects moved. Payroll go-live, absence rollout, and the reporting pack. Stacking them in one table.",
+          body: "In the account. Careers, status page, engineering blog. Staff SRE JD is asking for stitching HCM and Financial Management. Status page still has a 47-minute Sev-2. Writing the 3-why from that, not from a persona.",
         },
         {
           id: "m3",
-          from: "brief",
+          from: "attach",
           kind: "draft",
-          draftLabel: "Weekly project brief · not sent",
+          draftLabel: "3-why hypothesis",
           artifact: {
-            kind: "table",
-            title: "Harbor weekly project brief",
-            caption: "Draft for Friday review. Edit before you send.",
-            columns: ["Project", "What moved", "Stuck on", "Next"],
-            rows: [
-              [
-                "Payroll go-live",
-                "Parallel run notes cleaned",
-                "Sample group sign-off",
-                "Tuesday working session",
-              ],
-              [
-                "Absence rollout",
-                "Config ready",
-                "Sample group list",
-                "Hold until payroll is clean",
-              ],
-              [
-                "Reporting pack",
-                "First draft written",
-                "Your review",
-                "Send after you edit",
-              ],
-            ],
+            kind: "packet",
+            title: "Acme 3-why",
+            fields: ACME_OUTBOUND.hypothesis.map((item) => ({
+              label: item.k,
+              value: item.body,
+            })),
           },
         },
         {
           id: "m4",
-          from: "brief",
+          from: "attach",
+          kind: "draft",
+          draftLabel: "Evidence + who cares",
+          artifact: {
+            kind: "packet",
+            title: "Proof, then the people",
+            fields: [
+              ...ACME_OUTBOUND.evidence.map((item) => ({
+                label: item.source,
+                value: item.finding,
+              })),
+              ...ACME_OUTBOUND.targets.map((person) => ({
+                label: `${person.name} · ${person.role}`,
+                value: person.why,
+              })),
+            ],
+          },
+        },
+        {
+          id: "m5",
+          from: "attach",
+          kind: "draft",
+          draftLabel: "LinkedIn · not sent",
+          artifact: {
+            kind: "linkedin",
+            title: "LinkedIn to Priya Shah",
+            to: "Priya Shah",
+            role: "VP Engineering, Acme",
+            body: "Priya — your status page from 14 days ago and the Staff SRE JD say the same thing: on-call still stitches tools to name a Sev-2. 90 seconds on how HCM + Financial Management in the platform team would have named that incident. Draft only. Nothing sent.",
+          },
+        },
+        {
+          id: "m6",
+          from: "attach",
+          kind: "draft",
+          draftLabel: "Gmail · not sent",
+          artifact: {
+            kind: "gmail",
+            title: "Email to Priya Shah",
+            to: "Priya Shah, VP Engineering",
+            subject: "Acme's last Sev-2 and the Staff SRE JD",
+            body: "Priya — the 47-minute Sev-2 and the Staff SRE posting both point at stitching HCM and Financial Management. I put a one-page note on how Workday would start in that platform team, not a product tour. Happy to walk Chris Okonkwo through it too. Nothing else in the ask. Draft only until you tap Send.",
+          },
+        },
+        {
+          id: "m7",
+          from: "attach",
+          kind: "draft",
+          draftLabel: "Page for this account · not live",
+          artifact: {
+            kind: "one-pager",
+            title: ACME_OUTBOUND.page.headline,
+            eyebrow: "Page for Acme",
+            sections: [
+              {
+                heading: "What we saw",
+                body:
+                  ACME_OUTBOUND.evidence[0]?.finding ??
+                  "Public incident. The stitch is still the story.",
+              },
+              {
+                heading: "Why this team",
+                body:
+                  ACME_OUTBOUND.hypothesis.find(
+                    (item) => item.k === "Why them",
+                  )?.body ?? "VP Eng owns time-to-fix.",
+              },
+              {
+                heading: "How the product maps",
+                body: ACME_OUTBOUND.page.body,
+              },
+            ],
+          },
+        },
+        {
+          id: "m8",
+          from: "attach",
           kind: "system",
-          body: "Nothing sent. The table stays a draft until you tap Send.",
+          body: "Nothing sent. LinkedIn, Gmail, and the page stay drafts until you tap Send.",
         },
       ],
     },

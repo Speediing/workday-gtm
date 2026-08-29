@@ -63,20 +63,6 @@ export function ArtifactCard({ artifact }: { artifact: Artifact }) {
           ) : null}
         </div>
       );
-    case "talk-tracks":
-      return (
-        <div className="art art-tracks">
-          <p className="art-kicker">{artifact.title}</p>
-          <ul>
-            {artifact.tracks.map((track) => (
-              <li key={track.seat}>
-                <p className="art-label">{track.seat}</p>
-                <p>{track.line}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
     case "forecast":
       return (
         <div className="art art-forecast">
