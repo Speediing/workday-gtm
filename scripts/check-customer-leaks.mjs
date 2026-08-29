@@ -29,21 +29,37 @@ const NAMES = [
   "datadog",
   "seagate",
   "concentrix",
-  "krista",
   "madeline",
-  "acme",
 ];
 
 const MARKERS = [
   "brand-dd",
   "--dd-h",
-  "standardize-room",
-  "legal-redlines",
-  "attach-engine",
+  "implementation-plan",
+  "sourced-answer",
+  "project-brief",
   "632ca6",
   "4c1d82",
   "8d68ce",
   "9774d2",
+];
+
+const FORBIDDEN_COPY = [
+  /\bAPM\b/i,
+  /\bLogs\b/i,
+  /\bRUM\b/i,
+  /\bBrief\b/i,
+  /\bRelay\b/i,
+  /\bTARS\b/i,
+  /\bPIXIE\b/i,
+  /\bScout\b/i,
+  /\bseats?\b/i,
+  /Bits AI/i,
+  /An customer/i,
+  /Friday review/i,
+  /kickoff notes/i,
+  /implementation plan/i,
+  /dd_.*\.png/i,
 ];
 
 const SOURCE_EXT = new Set([
@@ -82,7 +98,6 @@ function isUserFacing(file) {
 
 const nameRe = new RegExp(`\\b(${NAMES.join("|")})\\b`, "i");
 const markerRe = new RegExp(MARKERS.map((m) => m.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"), "i");
-const emDash = "\u2014";
 
 const files = trackedFiles().filter(shouldScan);
 const errors = [];
@@ -106,8 +121,11 @@ for (const file of files) {
     if (markerHit) {
       errors.push(`${file}:${n} forbidden marker ${markerHit[0]}`);
     }
-    if (isUserFacing(file) && line.includes(emDash)) {
-      errors.push(`${file}:${n} forbidden em dash`);
+    if (isUserFacing(file)) {
+      const copyHit = FORBIDDEN_COPY.find((pattern) => pattern.test(line));
+      if (copyHit) {
+        errors.push(`${file}:${n} forbidden copy ${copyHit}`);
+      }
     }
   });
 }

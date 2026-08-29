@@ -26,29 +26,4 @@ export const CLIPS: Record<ClipId, Clip> = {
     "Slides from the room",
     "Granola is in. Slides writes the What we heard cards while she is still on the call.",
   ),
-  "04-engineer-bugbot": clip(
-    "04-engineer-bugbot",
-    "Engineer",
-    "Wired to the repo. Answers a setup question without leaving the thread.",
-  ),
-  "05-forecast-sfdc": clip(
-    "05-forecast-sfdc",
-    "Forecast",
-    "Demo notes in. Next steps in the format her manager wants.",
-  ),
-  "06-customer-expert": clip(
-    "06-customer-expert",
-    "Customer expert",
-    "Who is in the account, what they use, questions in Slack.",
-  ),
-  "07-customer-exec-brief": clip(
-    "07-customer-exec-brief",
-    "Exec notes",
-    "Turns what it just watched her do into a short note for her boss.",
-  ),
-  "08-chief-groupchat": clip(
-    "08-chief-groupchat",
-    "Group chat",
-    "Opens a group channel and splits the work.",
-  ),
 };
